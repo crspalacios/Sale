@@ -6,7 +6,14 @@
     <Application.Resources>
 
         <ResourceDictionary>
+            <!-- Locator -->
             <infra:InstanceLocator x:Key="Locator"/>
+            
+            <!-- Parameters -->
+            <x:String x:Key="UriAPI">https://saleapi.azurewebsites.net</x:String>
+            <x:String x:Key="UriAPrefix">/api</x:String>
+            <x:String x:Key="UriProductsController">/Products</x:String>
+
         </ResourceDictionary>
 
     </Application.Resources>

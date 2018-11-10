@@ -2,10 +2,13 @@
 namespace Sale.ViewModels
 {
     using Common.Models;
+    using GalaSoft.MvvmLight.Command;
+    using Sale.Helper;
     using Services;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Windows.Input;
     using Xamarin.Forms;
 
     public class ProductsViewModel : BaseViewModel
@@ -14,6 +17,7 @@ namespace Sale.ViewModels
         #region Atrributes
         private ObservableCollection<Product> products;
         private ApiService apiService;
+        private bool isRefreshing;
         #endregion
 
         #region Properties
@@ -23,6 +27,12 @@ namespace Sale.ViewModels
             set { SetValue(ref this.products, value); }
         }
         public string Label { get; set; }
+
+        public bool IsRefreshing
+        {
+            get { return this.isRefreshing; }
+            set { SetValue(ref this.isRefreshing, value); }
+        }
         #endregion
 
         #region Constructor
@@ -30,25 +40,50 @@ namespace Sale.ViewModels
         {
             this.apiService = new ApiService();
             this.LoadProducts();
-            Label="bindado"
+           
         }
         #endregion
 
-        #region Methods
+        #region Commands
+        public ICommand RefreshCommand
+        {
+            get
+            {
+                return new RelayCommand(LoadProducts);
+            }
+        }
+        #endregion
 
+
+        #region Methods
         private async void LoadProducts()
         {
-            var response = await this.apiService.GetList<Product>("https://saleapi.azurewebsites.net",
-                                                                  "/api",
-                                                                  "/Products");
+
+            this.IsRefreshing = true;
+
+            var connection = await this.apiService.CheckConnection();
+            if(!connection.IsSuccess)
+            {
+                this.IsRefreshing = false;
+                await Application.Current.MainPage.DisplayAlert(Languages.Error, connection.Message, Languages.Accept);
+                return;
+            }
+
+            var url = Application.Current.Resources["UriAPI"].ToString();
+            var prefix = Application.Current.Resources["UriAPrefix"].ToString();
+            var controller = Application.Current.Resources["UriProductsController"].ToString();
+
+            var response = await this.apiService.GetList<Product>(url, prefix, controller);
             if(!response.IsSuccess)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", response.Message, "Accept");
+                this.IsRefreshing = false;
+                await Application.Current.MainPage.DisplayAlert(Languages.Error, response.Message, Languages.Accept);
                 return;
             }
 
             var list = (List<Product>)response.Result;
             this.Products = new ObservableCollection<Product>(list);
+            IsRefreshing = false;
         }
         #endregion
     }
