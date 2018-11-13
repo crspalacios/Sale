@@ -5,7 +5,6 @@ namespace Sale.ViewModels
     using GalaSoft.MvvmLight.Command;
     using Sale.Helper;
     using Services;
-    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Windows.Input;
@@ -40,7 +39,20 @@ namespace Sale.ViewModels
         {
             this.apiService = new ApiService();
             this.LoadProducts();
+            instnace = this;
            
+        }
+        #endregion
+
+        #region Singleton
+        private static ProductsViewModel instnace;
+        public static ProductsViewModel GetInstacne()
+        {
+            if(instnace == null)
+            {
+                return new ProductsViewModel();
+            }
+            return instnace;
         }
         #endregion
 
@@ -69,10 +81,11 @@ namespace Sale.ViewModels
                 return;
             }
 
+
             var url = Application.Current.Resources["UriAPI"].ToString();
             var prefix = Application.Current.Resources["UriAPrefix"].ToString();
             var controller = Application.Current.Resources["UriProductsController"].ToString();
-
+            
             var response = await this.apiService.GetList<Product>(url, prefix, controller);
             if(!response.IsSuccess)
             {
@@ -86,5 +99,7 @@ namespace Sale.ViewModels
             IsRefreshing = false;
         }
         #endregion
+
+
     }
 }

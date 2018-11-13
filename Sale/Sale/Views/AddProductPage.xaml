@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"     
+             xmlns:i18n="clr-namespace:Sale.Helper"
+             x:Class="Sale.Views.AddProductPage"
+             BindingContext="{Binding Main, Source={StaticResource Locator}}"
+             Title="{i18n:Translate AddProduct}">
+    <ContentPage.Content>
+        <StackLayout
+            BindingContext="{Binding AddProduct}"
+            Padding="5">
+            <Image
+
+                WidthRequest="150"
+                HeightRequest="150"
+                Source="{Binding ImageSource}">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ChangeImageCommand}"/>
+                </Image.GestureRecognizers>
+            </Image>
+            <Label
+                HorizontalOptions="Center"
+                FontSize="7"
+                Text="{i18n:Translate ChangeImage}"></Label>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    HorizontalOptions="Center"
+                    Text="{i18n:Translate Description}"></Label>
+                <Entry
+                    Grid.Column="1"
+                    Grid.Row="0"
+                    Text="{Binding Description}"
+                    Placeholder="{i18n:Translate DescriptionPlaceholder}"></Entry>
+
+                <Label
+                    HorizontalOptions="Center"
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    Text="{i18n:Translate Price}"></Label>
+                <Entry
+                    Grid.Column="1"
+                    Grid.Row="1"  
+                    Text="{Binding Price}"
+                    Placeholder="{i18n:Translate PricePlaceholder}"
+                    Keyboard="Numeric"></Entry>
+
+                <Label
+                    Grid.Column="0"
+                    Grid.Row="2"   
+                    Text="{i18n:Translate Remarks}"></Label>
+                <Editor
+                    Grid.Column="1"
+                    Grid.Row="2"   
+                    Text="{Binding Remarks, Mode=TwoWay}"
+                    VerticalOptions="FillAndExpand"></Editor>
+            </Grid>
+            <ActivityIndicator
+                VerticalOptions="CenterAndExpand"
+                IsRunning="{Binding IsRunning}"></ActivityIndicator>
+
+            <Button
+                BorderColor="blue"
+                BackgroundColor="DodgerBlue"
+                BorderRadius="23"
+                Command="{Binding SaveCommand}"
+                HeightRequest="46"
+                IsEnabled="{Binding IsEnabled}"
+                Text="{i18n:Translate Save}"
+                TextColor="White"></Button>
+
+
+
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

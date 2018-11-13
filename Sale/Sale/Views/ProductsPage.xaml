@@ -5,11 +5,18 @@
              x:Class="Sale.Views.ProductsPage"
              BindingContext="{Binding Main, Source={StaticResource Locator}}"
              Title="{i18n:Translate Products}">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Icon="ic_action_add_circle_outline" Command="{Binding AddProductCommand}"/>
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
+
         <StackLayout
+
+
             BindingContext="{Binding Products}"
             Padding="25">
             <ListView
+  
                 HasUnevenRows="True"
                 IsRefreshing="{Binding IsRefreshing}"
                 ItemsSource="{Binding Products}"
@@ -20,26 +27,38 @@
                         <ViewCell>
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="2*"/>
                                 </Grid.ColumnDefinitions>
+                                <Image
+                                    Source="{Binding ImageFullPath}"
+                                    WidthRequest="50"
+                                    HeightRequest="50"></Image>
+                                <StackLayout
+                                     Grid.Column="1"
+                                     VerticalOptions="Center">
+                                    <Label
+                                        FontAttributes="Bold"
+                                        TextColor="Black"
+                                        Text="{Binding Description}"></Label>
+                                    <Label
+                                        FontSize="9"
+                                        TextColor="Navy"
+                                        Text="{Binding Remarks}"></Label>
+                                </StackLayout>
                                 <Label
-                                    FontAttributes="Bold"
+                                    Grid.Column="2"
                                     TextColor="Black"
-                                    Grid.Column="0"
-                                    Text="{Binding Description}"></Label>
-
-                                <Label
-                                    Grid.Column="1"
-                                    HorizontalOptions="End"
-                                    TextColor="Black"
-                                    Text="{Binding Price, StringFormat='{0:C2}'}"></Label>
+                                    Text="{Binding Price, StringFormat='{0:C2}'}"
+                                    HorizontalOptions="End"></Label>
 
                             </Grid>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
